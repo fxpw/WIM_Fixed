@@ -460,7 +460,7 @@ WIM.AddLocale("ruRU", {
     --ChatEngine.lua
     ["WIM will manage this chat type within its own message windows."] = "WIM будет управлять данным типом чата в рамках своего окна сообщений.",
     ["Show Minimap Alerts"] = "Оповещения у мини-карты",
-    ["Never pop-up on my screen."] = "Никогда не всплывать на маём экране.",
+    ["Never pop-up on my screen."] = "Никогда не всплывать на моём экране.",
     ["Never suppress messages."] = "Никогда не подавлять сообщения.",
     ["Have WIM monitor this channel."] = "Позволить WIMу следить за данным каналом.",
     ["Never Pop"] = "Не всплывать",
