@@ -90,10 +90,10 @@ db_defaults.chat = {
         showAlerts = true,
     },
     battleground = {
-    
+
     },
     say = {
-    
+
     }
 };
 
@@ -104,7 +104,7 @@ local function getRuleSet()
     local curState = db.pop_rules.chat.alwaysOther and "other" or curState
     return db.pop_rules.chat[curState];
 end
-    
+
 
 local function createWidget_Chat()
     local button = _G.CreateFrame("Button");
@@ -141,7 +141,7 @@ local function createWidget_Chat()
     button:SetScript("OnLeave", function(self)
                 --ChatUserList:Hide();
         end);
-    
+
     return button;
 end
 
@@ -161,7 +161,7 @@ local function getChatWindow(ChatName, chatType)
         Windows[ChatName]:UpdateIcon();
         Windows[ChatName].widgets.chat_info:SetActive(true);
         Windows[ChatName].chatList = Windows[ChatName].chatList or {};
-        
+
         if(chatType == "guild") then
             Windows[ChatName].CHAT_listCount = _G.GetNumGuildMembers;
             Windows[ChatName].CHAT_listFun = _G.GetGuildRosterInfo;
@@ -169,7 +169,7 @@ local function getChatWindow(ChatName, chatType)
             Windows[ChatName].CHAT_listCount = nil;
             Windows[ChatName].CHAT_listFun = nil;
         end
-        
+
         return Windows[ChatName];
     end
 end
@@ -261,7 +261,7 @@ function Guild:GUILD_ROSTER_UPDATE()
         -- update guild count
         cleanChatList(self.guildWindow);
         local count = 0;
-        for i=1, _G.GetNumGuildMembers() do 
+        for i=1, _G.GetNumGuildMembers() do
 	    local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = _G.GetGuildRosterInfo(i);
 	    if(online) then
 		_G.GuildControlSetRank(rankIndex);
@@ -356,7 +356,7 @@ function Officer:GUILD_ROSTER_UPDATE()
         -- update guild count
         cleanChatList(self.officerWindow);
         local count = 0;
-        for i=1, _G.GetNumGuildMembers() do 
+        for i=1, _G.GetNumGuildMembers() do
 	    local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = _G.GetGuildRosterInfo(i);
             if(online) then
                 _G.GuildControlSetRank(rankIndex);
@@ -585,7 +585,7 @@ function Raid:PARTY_MEMBERS_CHANGED()
             end
         end
         self.raidWindow.widgets.chat_info:SetText(count);
-    end 
+    end
 end
 
 function Raid:CHAT_MSG_RAID_CONTROLLER(eventController, ...)
@@ -1025,19 +1025,19 @@ function Channel:CHAT_MSG_CHANNEL(...)
     --check options. do we want the specified channels.
     if(isWorld and not db.chat.world.enabled) then
         return;
-    elseif(not isWorld and not db.chat.custom.enabled) then
+    elseif (not isWorld and not db.chat.custom.enabled) then
         return;
-    elseif(not db.chat[isWorld and "world" or "custom"].channelSettings[channelName] or not db.chat[isWorld and "world" or "custom"].channelSettings[channelName].monitor) then
-        return;
+    -- elseif(not db.chat[isWorld and "world" or "custom"].channelSettings[channelName] or not db.chat[isWorld and "world" or "custom"].channelSettings[channelName].monitor) then
+        -- return;
     end
     local win = getChatWindow(channelName, "channel");
     local color = _G.ChatTypeInfo["CHANNEL"..arg8];
-    if(arg7 == 1 or arg7 == 2 or arg7 == 22 or arg7 == 23 or arg7 == 26) then
+    -- if(arg7 == 1 or arg7 == 2 or arg7 == 22 or arg7 == 23 or arg7 == 26) then
         win.widgets.char_info:SetText(arg9);
         win.channelSpecial = _G.time();
-    else
-        win.widgets.char_info:SetText("");
-    end
+    -- else
+        -- win.widgets.char_info:SetText("");
+    -- end
     win.channelNumber = arg8;
     win.channelIdentifier = arg4;
     if(win:IsVisible()) then
@@ -1114,7 +1114,7 @@ function ChatAlerts:PostEvent_ChatMessage(event, ...)
         elseif(event == "SAY" and db.chat.say.showAlerts) then
             win = getChatWindow(_G.SAY, "say");
         end
-        
+
         if(win and not win:IsVisible() and win.unreadCount and win.unreadCount > 0) then
             local color = _G.ChatTypeInfo[string.upper(win.chatType)];
             MinimapPushAlert(win.theUser, RGBPercentToHex(color.r, color.g, color.b), win.unreadCount);
@@ -1132,9 +1132,9 @@ ChatAlerts:Enable();
 -- create ChatOptions Module
 local ChatOptions = CreateModule("ChatOptions");
 local function loadChatOptions()
-    
+
     local desc = L["WIM will manage this chat type within its own message windows."];
-    
+
     -- standard chat template
     local function createChatTemplate(chatName, moduleName, chatType)
         local chatDB = db.chat[chatType];
@@ -1149,7 +1149,7 @@ local function loadChatOptions()
         f.sub:CreateCheckButton(L["Never suppress messages."], chatDB, "neverSuppress");
         return f;
     end
-    
+
     local channelList = {};
     local function getChannelList(world)
         --clear list
@@ -1160,12 +1160,13 @@ local function loadChatOptions()
             local name, header, collapsed, channelNumber, count, active, category, voiceEnabled, voiceActive = _G.GetChannelDisplayInfo(i);
             if((world and category == "CHANNEL_CATEGORY_WORLD") or (not world and category == "CHANNEL_CATEGORY_CUSTOM")) then
                 table.insert(channelList, name.."*"..(active and "1" or "0").."*"..(channelNumber or "0"));
+                -- print(channelList, name.."*"..(active and "1" or "0").."*"..(channelNumber or "0"))
             end
         end
         return channelList;
     end
-    
-    
+
+
     local channelScrollCount = 1;
     local function createChannelChatTemplate(chatName, channelType, channelListFun)
         local f = options.CreateOptionsFrame();
@@ -1173,7 +1174,7 @@ local function loadChatOptions()
         f.sub.nextOffSetY = -10;
         f.sub.enabled = f.sub:CreateCheckButton(L["Enable"], db.chat[channelType], "enabled", nil, function(self, button) Channel:SettingsChanged(); end);
         f.sub.nextOffSetY = -10;
-        
+
         --list
         f.sub.list = f.sub:ImportCustomObject(_G.CreateFrame("Frame"));
         options.AddFramedBackdrop(f.sub.list);
@@ -1232,13 +1233,13 @@ local function loadChatOptions()
             button.bg:SetTexture(1,1,1, ((#self.buttons+1) % 2)*.1);
             button.bg:SetGradientAlpha("HORIZONTAL", 1,1,1,1, 0,0,0,0);
             button.border = {};
-            
+
             button.border.left = button:CreateTexture(nil, "OVERLAY");
             button.border.left:SetPoint("TOPLEFT");
             button.border.left:SetPoint("BOTTOMLEFT");
             button.border.left:SetWidth(4);
             button.border.left:SetTexture(1,1,1,.5);
-            
+
             button.title = button:CreateFontString(nil, "OVERLAY", "ChatFontNormal");
             button.title:SetPoint("TOPLEFT", 35, -8);
             button.title:SetPoint("TOPRIGHT");
@@ -1262,7 +1263,7 @@ local function loadChatOptions()
                 local name = self:GetParent().channelName;
                 db.chat[channelType].channelSettings[name].monitor = self:GetChecked();
             end);
-            
+
             -- Never Pop
             button.neverPop = _G.CreateFrame("CheckButton", nil, button, "UICheckButtonTemplate");
             button.neverPop:SetPoint("TOPLEFT", button.cb1, "BOTTOMRIGHT", 20, 0);
@@ -1300,8 +1301,8 @@ local function loadChatOptions()
             button.neverSuppress:SetScript("OnLeave", function(self)
                 self:GetParent():GetParent().help:SetText("");
             end);
-            
-            
+
+
             -- Show Minimap Alerts
             button.showAlerts = _G.CreateFrame("CheckButton", nil, button, "UICheckButtonTemplate");
             button.showAlerts:SetPoint("TOPLEFT", button.neverPop, "TOPRIGHT", 150, 0);
@@ -1320,7 +1321,7 @@ local function loadChatOptions()
             button.showAlerts:SetScript("OnLeave", function(self)
                 self:GetParent():GetParent().help:SetText("");
             end);
-            
+
             -- Don't record history
             button.noHistory = _G.CreateFrame("CheckButton", nil, button, "UICheckButtonTemplate");
             button.noHistory:SetPoint("TOPLEFT", button.showAlerts, "BOTTOMLEFT", 0, 0);
@@ -1339,8 +1340,8 @@ local function loadChatOptions()
             button.noHistory:SetScript("OnLeave", function(self)
                 self:GetParent():GetParent().help:SetText("");
             end);
-            
-	    
+
+
 	    -- Don't play sounds
             button.noSound = _G.CreateFrame("CheckButton", nil, button, "UICheckButtonTemplate");
             button.noSound:SetPoint("TOPLEFT", button.noHistory, "TOPRIGHT", 100, 0);
@@ -1359,9 +1360,9 @@ local function loadChatOptions()
             button.noSound:SetScript("OnLeave", function(self)
                 self:GetParent():GetParent().help:SetText("");
             end);
-	    
-	    
-            
+
+
+
             if(#self.buttons == 0) then
                 button:SetPoint("TOPLEFT");
                 button:SetPoint("TOPRIGHT", -25, 0);
@@ -1369,7 +1370,7 @@ local function loadChatOptions()
                 button:SetPoint("TOPLEFT", self.buttons[#self.buttons], "BOTTOMLEFT");
                 button:SetPoint("TOPRIGHT", self.buttons[#self.buttons], "BOTTOMRIGHT");
             end
-            
+
             button:SetScript("OnUpdate", function(self, elapsed)
                     for _, border in pairs(self.border) do
                         if(_G.MouseIsOver(self)) then
@@ -1379,7 +1380,7 @@ local function loadChatOptions()
                         end
                     end
             end);
-            
+
             table.insert(self.buttons, button);
         end
         for i=1, 4 do
@@ -1392,51 +1393,51 @@ local function loadChatOptions()
         f.sub.list.help:SetJustifyH("LEFT");
         local font, height, flags = f.sub.list.help:GetFont();
         f.sub.list.help:SetFont(font, 12, flags);
-        
-        
+
+
         return f;
     end
-    
+
     local function createGuildChat()
         local f = createChatTemplate(_G.GUILD, "GuildChat", "guild");
         return f;
     end
-    
+
     local function createOfficerChat()
         local f = createChatTemplate(_G.GUILD_RANK1_DESC, "OfficerChat", "officer");
         return f;
     end
-    
+
     local function createPartyChat()
         local f = createChatTemplate(_G.PARTY, "PartyChat", "party");
         return f;
     end
-    
+
     local function createRaidChat()
         local f = createChatTemplate(_G.RAID, "RaidChat", "raid");
         return f;
     end
-    
+
     local function createBattlegroundChat()
         local f = createChatTemplate(_G.BATTLEGROUND, "BattlegroundChat", "battleground");
         return f;
     end
-    
+
     local function createSayChat()
         local f = createChatTemplate(_G.SAY, "SayChat", "say");
         return f;
     end
-    
+
     local function createWorldChat()
         local f = createChannelChatTemplate(L["World Chat"], "world", function() return getChannelList(true); end);
         return f;
     end
-    
+
     local function createCustomChat()
         local f = createChannelChatTemplate(L["Custom Chat"], "custom", getChannelList);
         return f;
     end
-    
+
     RegisterOptionFrame(L["Chat"], _G.GUILD, createGuildChat);
     RegisterOptionFrame(L["Chat"], _G.GUILD_RANK1_DESC, createOfficerChat);
     RegisterOptionFrame(L["Chat"], _G.PARTY, createPartyChat);
@@ -1445,7 +1446,7 @@ local function loadChatOptions()
     RegisterOptionFrame(L["Chat"], _G.SAY, createSayChat);
     RegisterOptionFrame(L["Chat"], L["World Chat"], createWorldChat);
     RegisterOptionFrame(L["Chat"], L["Custom Chat"], createCustomChat);
-    
+
     dPrint("Chat Options Initialized...");
     ChatOptions.optionsLoaded = true;
 end
@@ -1458,8 +1459,8 @@ local function createUserList()
     win:SetPoint("CENTER");
     -- set backdrop
     win:SetBackdrop({bgFile = "Interface\\AddOns\\"..addonTocName.."\\Modules\\Textures\\Menu_bg",
-        edgeFile = "Interface\\AddOns\\"..addonTocName.."\\Modules\\Textures\\Menu", 
-        tile = true, tileSize = 32, edgeSize = 32, 
+        edgeFile = "Interface\\AddOns\\"..addonTocName.."\\Modules\\Textures\\Menu",
+        tile = true, tileSize = 32, edgeSize = 32,
         insets = { left = 32, right = 32, top = 32, bottom = 32 }});
     win:SetWidth(200);
     win.title = _G.CreateFrame("Frame", win:GetName().."Title", win);
@@ -1475,7 +1476,7 @@ local function createUserList()
     win.title.text:SetJustifyH("RIGHT");
     win.title.text:SetText("Testing...");
     win.buttons = {};
-    
+
     for i = 1, USERLIST_BUTTON_COUNT do
         local button = _G.CreateFrame("Button", win:GetName().."Button1", win);
         button:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestLogTitleHighlight", "ADD");
@@ -1489,14 +1490,14 @@ local function createUserList()
             self.user = user;
             self.text:SetText("  "..user);
         end
-        
+
         button:SetScript("OnClick", function(self, button)
             --if(button == "RightButton") then
                 --_G.ChannelRosterFrame_ShowDropdown(self.user);
             --end
         end);
-        
-        
+
+
         if(i == 1) then
             button:SetPoint("TOPLEFT", 20, -35);
             button:SetPoint("RIGHT", -30, 0);
@@ -1504,18 +1505,18 @@ local function createUserList()
             button:SetPoint("TOPLEFT", win.buttons[i-1], "BOTTOMLEFT");
             button:SetPoint("TOPRIGHT", win.buttons[i-1], "BOTTOMRIGHT");
         end
-       
-       table.insert(win.buttons, button); 
+
+       table.insert(win.buttons, button);
     end
     win:SetHeight(#win.buttons*win.buttons[1]:GetHeight() + 35 + 20);
     win.scroll = _G.CreateFrame("ScrollFrame", win:GetName().."Scroll", win, "FauxScrollFrameTemplate");
     win.scroll:SetPoint("TOPLEFT", win.buttons[1], "TOPLEFT", 0, 0);
     win.scroll:SetPoint("BOTTOMRIGHT", win.buttons[#win.buttons], "BOTTOMRIGHT", -10, 0);
-    
+
     win.scroll:SetScript("OnVerticalScroll", function(self, offset)
         _G.FauxScrollFrame_OnVerticalScroll(self, offset, win.buttons[1]:GetHeight(), win.updateList);
     end);
-    
+
     win:SetScript("OnHide", function(self)
         self:Hide();
         self.attachedTo = nil;
@@ -1523,7 +1524,7 @@ local function createUserList()
         self.listFun = nil;
         self:SetParent(_G.UIParent);
     end);
-    
+
     win:SetScript("OnUpdate", function(self, elapsed)
         if(_G.MouseIsOver(self) or (self.attachedTo and _G.MouseIsOver(self.attachedTo))) then
             self.idleTime = 0;
@@ -1534,12 +1535,12 @@ local function createUserList()
             end
         end
     end);
-    
-    
+
+
     win.SetChannel = function(self, title)
         self.title.text:SetText(string.format(L["Users in %s"], title or _G.CHAT).."  ");
     end
-    
+
     win.PopUp = function(self, attachTo, point, point2, offsetX, offsetY)
         if(self.attachedTo == attachTo) then
             self:Hide();
@@ -1552,7 +1553,7 @@ local function createUserList()
         self:Show();
         win:updateList();
     end
-    
+
     win.updateList = function(self)
         self = win;
         if(self.listCount and self.listFun) then
@@ -1568,13 +1569,13 @@ local function createUserList()
                     self.buttons[i]:Hide();
                 end
             end
-            
+
             _G.FauxScrollFrame_Update(win.scroll, count, USERLIST_BUTTON_COUNT, self.buttons[1]:GetHeight());
         else
             self:Hide();
         end
     end
-    
+
     win.SetParentWindow = function(self, parent, start)
         start = start or self;
         start.parentWindow = parent;
@@ -1584,7 +1585,7 @@ local function createUserList()
             end
         end
     end
-    
+
     return win;
 end
 
@@ -1596,7 +1597,7 @@ end
 function ChatOptions:OnEnableWIM()
     loadChatOptions();
     --load joined channels.
-    
+
     --create user List
     if(not ChatUserList) then
         ChatUserList = createUserList();

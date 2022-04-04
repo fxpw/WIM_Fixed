@@ -364,7 +364,7 @@ WIM.AddLocale("ruRU", {
 	["Maintenance"] = "Поддержка",
 	["Allowing your history logs to grow too large will affect the game's performance, therefore it is reccomended that you use the following options."] = "Позволяя вести журнал вашей истории, что может сильно повлиять на производительность вашей игры, поэтому рекомендуется использовать следующие настройки.",
 	["Save a maximum number of messages per person."] = "Макс. количество сохраняемых сообщений на человека.",
-	["%d |4Week:Weeks;"] = "%d |4ниделя: нидели:нидель;",
+	["%d |4Week:Weeks;"] = "%d |4неделя: недели:недель;",
 	["Automatically delete old messages."] = "Автоматически удалять старые сообщения.",
 	["WIM-2-WIM is a feature which allows users with WIM to interact in ways that normal whispering can not."] = "WIM-2-WIM даёт возможность пользователям с WIM взаимодействовать таким образом, что нормальное перешептывание не может.",
 	["Enable WIM-2-WIM"] = "Включить WIM-2-WIM",
