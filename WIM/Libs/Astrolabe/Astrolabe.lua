@@ -1560,7 +1560,7 @@ WorldMapSize = {
 		},
 	},
 }
-
+local debug = false
 local zeroData;
 zeroData = { xOffset = 0, height = 0, yOffset = 0, width = 0, __index = function() return zeroData end };
 setmetatable(zeroData, zeroData);
@@ -1571,7 +1571,9 @@ for continent, zones in pairs(Astrolabe.ContinentList) do
 	for index, mapName in pairs(zones) do
 		if not ( mapData.zoneData[mapName] ) then
 			--WE HAVE A PROBLEM!!!
-			ChatFrame1:AddMessage("Astrolabe is missing data for "..select(index, GetMapZones(continent))..".");
+			if debug then
+				ChatFrame1:AddMessage("Astrolabe is missing data for "..select(index, GetMapZones(continent))..".");
+			end
 			mapData.zoneData[mapName] = zeroData;
 		end
 		mapData[index] = mapData.zoneData[mapName];

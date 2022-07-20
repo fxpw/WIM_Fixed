@@ -1156,7 +1156,7 @@ local function loadChatOptions()
         for k, _ in pairs (channelList) do
             channelList[k] = nil;
         end
-        for i=1, 20 do
+        for i=1, 8 do
             local name, header, collapsed, channelNumber, count, active, category, voiceEnabled, voiceActive = _G.GetChannelDisplayInfo(i);
             if((world and category == "CHANNEL_CATEGORY_WORLD") or (not world and category == "CHANNEL_CATEGORY_CUSTOM")) then
                 table.insert(channelList, name.."*"..(active and "1" or "0").."*"..(channelNumber or "0"));

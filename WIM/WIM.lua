@@ -488,6 +488,7 @@ end
 
 local talentOrder = {};
 function TalentsToString(talents, class)
+    if not talents then return end
 	--passed talents in format of "#/#/#";
         -- first check that all required information is passed.
 	local t1, t2, t3 = string.match(talents or "", "(%d+)/(%d+)/(%d+)");
