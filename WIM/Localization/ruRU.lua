@@ -196,7 +196,7 @@ WIM.AddLocale("ruRU", {
 	["Display history viewer."] = "Показывать просмотр истории",
 
     -- ldb.lua --
-	["No New Messages"] = "Пусто",
+	["No New Messages"] = "Нет сообщений",
 
     -- Menu.lua --
 	["Whispers"] = "Сообщения",
